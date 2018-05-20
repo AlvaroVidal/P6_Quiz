@@ -170,33 +170,6 @@ exports.randomPlay = (req, res, next) => {
                 });
         }
     });
-    /*
-
-    new Sequelize.Promise((resolve,reject) => resolve())
-        .then(() => {
-            if (!req.session.score) {
-                return models.quiz.findAll()
-                    .then(quizzes => {
-                        req.session.resolved = quizzes;
-                        req.session.score = 0;
-                    })
-            }
-        })
-        .then(() => {
-            let id = Math.floor(Math.random()*req.session.resolved.length);
-            let quiz = req.session.resolved[id];
-            req.session.resolved.splice(id, 1);
-            if(quiz) {
-            res.render("quizzes/random_play", {
-                quiz,
-                score: req.session.score
-            });
-            } else {
-                re.render("quizzes/random_nomore", {
-                    score
-                });
-            }   
-        });*/
     
 }
 

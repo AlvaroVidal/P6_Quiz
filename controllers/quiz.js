@@ -161,7 +161,7 @@ exports.randomPlay = (req, res, next) => {
     .then(quiz => {
         if(quiz) {
             res.render("quizzes/random_play", {
-                quiz,
+                quizzes,
                 score
             });
         } else {

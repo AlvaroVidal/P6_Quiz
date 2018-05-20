@@ -158,10 +158,10 @@ exports.randomPlay = (req, res, next) => {
     req.session.resolved = req.session.resolved || [];
     const score = req.session.resolved.length;
     models.quiz.findOne({where: {id: {[Sequelize.Op.notIn]: req.session.resolved}}, order: [Sequelize.fn("RANDOM")]})
-    .then(quiz => {
-        if(quiz) {
+    .then(quizzes => {
+        if(quizzes) {
             res.render("quizzes/random_play", {
-                quiz,
+                quizzes,
                 score
             });
         } else {
@@ -178,8 +178,8 @@ exports.randomCheck = (req, res, next) => {
     const answer = req.query.answer || "";
     const result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
     if(result) {
-        if(req.session.resolved.indexOf(req.quiz.id) === -1)
-            req.session.resolved.push(req.quiz.id);
+        if(req.session.resolved.indexOf(req.quizzes.id) === -1)
+            req.session.resolved.push(req.quizses.id);
         };
     const score = req.session.resolved.length;
     if(!result) {

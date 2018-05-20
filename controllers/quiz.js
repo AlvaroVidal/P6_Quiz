@@ -153,3 +153,71 @@ exports.check = (req, res, next) => {
         answer
     });
 };
+
+exports.randomPlay = (req, res, next) => {
+    req.session.resolved = req.session.resolved || [];
+    const score = req.session.resolved.legnth;
+    models.quiz.findOne({where: {id: {[Sequelize.Op.notIn]: req.session.resolved}}, order: [Sequelize.fn("RANDOM")]})
+    .then(quiz => {
+        if(quiz) {
+            res.render("quizzes/random_play", {
+                quiz,
+                score
+            });
+        } else {
+            res.render("quizzes/random_nomore", {
+                    score
+                });
+        }
+    });
+    /*
+
+    new Sequelize.Promise((resolve,reject) => resolve())
+        .then(() => {
+            if (!req.session.score) {
+                return models.quiz.findAll()
+                    .then(quizzes => {
+                        req.session.resolved = quizzes;
+                        req.session.score = 0;
+                    })
+            }
+        })
+        .then(() => {
+            let id = Math.floor(Math.random()*req.session.resolved.length);
+            let quiz = req.session.resolved[id];
+            req.session.resolved.splice(id, 1);
+            if(quiz) {
+            res.render("quizzes/random_play", {
+                quiz,
+                score: req.session.score
+            });
+            } else {
+                re.render("quizzes/random_nomore", {
+                    score
+                });
+            }   
+        });*/
+    
+}
+
+exports.randomCheck = (req, res, next) => {
+    req.session.resolved = req.session.resolved || [];
+    const answer = req.query.answer || "";
+    const result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+    if(result) {
+        if(req.session.resolved.indexOf(req.quiz.id) === -1)
+            req.session.resolved.push(req.quiz.id);
+        };
+    const score = req.session.resolved.length;
+    if(!result) {
+        delete req.session.resolved;
+        score = req.session.resolved.length;
+    }
+
+    res.render("quizzes/random_result", {
+        result,
+        score,
+        answer
+    });
+}
+

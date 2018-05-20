@@ -156,7 +156,7 @@ exports.check = (req, res, next) => {
 
 exports.randomPlay = (req, res, next) => {
     req.session.resolved = req.session.resolved || [];
-    const score = req.session.resolved.legnth;
+    const score = req.session.resolved.length;
     models.quiz.findOne({where: {id: {[Sequelize.Op.notIn]: req.session.resolved}}, order: [Sequelize.fn("RANDOM")]})
     .then(quiz => {
         if(quiz) {
@@ -184,7 +184,6 @@ exports.randomCheck = (req, res, next) => {
     const score = req.session.resolved.length;
     if(!result) {
         delete req.session.resolved;
-        score = req.session.resolved.length;
     }
 
     res.render("quizzes/random_result", {

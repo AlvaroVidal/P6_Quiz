@@ -120,6 +120,11 @@ router.delete('/quizzes/:quizId(\\d+)',
 router.get('/quizzes/:quizId(\\d+)/play',  quizController.play);
 router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
 
+router.get("/quizzes/randomcheck/:quizId(\\d+)", quizController.randomCheck);
+router.get("/quizzes/randomplay", quizController.randomPlay);
+//router.get("/quizzes/random_nomore", quizController.random_nomore);
+
+
 
 
 router.post('/quizzes/:quizId(\\d+)/tips',

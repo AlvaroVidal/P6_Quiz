@@ -225,3 +225,43 @@ exports.check = (req, res, next) => {
         answer
     });
 };
+
+exports.randomPlay = (req, res, next) => {
+    req.session.resolved = req.session.resolved || [];
+    const score = req.session.resolved.length;
+    models.quiz.findOne({where: {id: {[Sequelize.Op.notIn]: req.session.resolved}}, order: [Sequelize.fn("RANDOM")]})
+    .then(quiz => {
+        if(quiz) {
+            res.render("quizzes/random_play", {
+                quiz,
+                score
+            });
+        } else {
+            res.render("quizzes/random_nomore", {
+                    score
+                });
+        }
+    });
+    
+}
+
+exports.randomCheck = (req, res, next) => {
+    req.session.resolved = req.session.resolved || [];
+    const answer = req.query.answer || "";
+    const result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+    if(result) {
+        if(req.session.resolved.indexOf(req.quiz.id) === -1)
+            req.session.resolved.push(req.quiz.id);
+        };
+    const score = req.session.resolved.length;
+    if(!result) {
+        delete req.session.resolved;
+    }
+
+    res.render("quizzes/random_result", {
+        result,
+        score,
+        answer
+    });
+}
+
